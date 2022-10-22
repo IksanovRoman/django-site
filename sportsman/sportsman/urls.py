@@ -20,5 +20,7 @@ from player.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('player/', include('player.urls')),
+    path('', include('player.urls')),
 ]
+
+handler404 = PageNotFound
