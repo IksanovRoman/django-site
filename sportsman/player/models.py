@@ -7,3 +7,6 @@ class Player(models.Model):
     photo = models.ImageField(upload_to="photo/%Y/%m/%d/")
     time_created = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
