@@ -1,0 +1,60 @@
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="45.css">
+	</head>
+	
+	<body>
+		<div id="underwrapper">
+			<h1>down the stream</h1>
+			<p>template designed by webtemplateocean.com</p>
+		</div>
+		
+		<div id="wrapper">
+
+			<header>
+				{% block mainmenu %}
+
+				<ul>
+					{% for m in menu %}
+					<li><a href="#"> {{ m }} </a></li>
+					{% endfor %}
+					<div class="clearfix"></div>
+				</ul>
+
+				<div class="clearfix"></div>
+				<img src="45_1.jpg">
+				{% endblock %}
+			</header>
+
+
+			<main>
+				{% block content %}
+				{% endblock %}
+			</main>
+			
+			<aside>
+				<div>
+				<h2>Saepe repellendus</h2>
+				<ul>
+					<li><a href="#">Lorem ipsum dolor.</a></li><hr>
+					<li><a href="#">Saepe repellendus, veniam!</a></li><hr>
+					<li><a href="#">Repellendus laborum, sequi.</a></li><hr>
+					<li><a href="#">Inventore laudantium, eos!</a></li><hr>
+					<li><a href="#">Voluptate, ea, quaerat.</a></li><hr>
+				</ul>
+				</div>
+			</aside>
+			<div class="clearfix"></div>
+
+			<footer>
+				<div><a href="#">
+				Copyright © 2012, designed by WebTemplateOcean.com</a>
+				</div>
+			</footer>
+					
+		</div>
+	</body>
+	
+</html>

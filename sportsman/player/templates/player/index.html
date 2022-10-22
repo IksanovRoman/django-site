@@ -1,0 +1,16 @@
+{% extends 'player/base.html' %}
+
+{% block content %}
+<p>Контент главной страницы
+
+<ul>
+    {% for p in posts%}
+        <li>
+            <h2> {{ p.title }} </h2>
+            <p> {{ p.content }}
+            <hr>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+

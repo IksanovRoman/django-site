@@ -1,9 +1,16 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
+from .models import *
+
+menu = ['Главная страница', 'О сайте', 'Добавить статью', 'Обратная связь', 'Войти']
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Страница")
+    posts = Player.objects.all()
+    return render(request, 'player/index.html', {'posts': posts, 'menu': menu, 'title':'Главная страница'})
+
+def about(request):
+    return render(request, 'player/about.html', {'menu': menu, 'title':'О сайте'})
 
 def categories(request, catid):
     return HttpResponse(f"Категории спортсменов. Страница №{catid}")
