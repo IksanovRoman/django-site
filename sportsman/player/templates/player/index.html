@@ -1,13 +1,12 @@
 {% extends 'player/base.html' %}
 
 {% block content %}
-<p>Контент главной страницы
-
-<ul>
+<ul class="list_content">
     {% for p in posts%}
         <li>
             <h2> {{ p.title }} </h2>
-            <p> {{ p.content }}
+            <p class="show_content"> {{ p.content|linebreaks|truncatewords:100 }} </p>
+            <p class="read_post_button"><a href="#">Читать пост </a></p>
             <hr>
         </li>
     {% endfor %}

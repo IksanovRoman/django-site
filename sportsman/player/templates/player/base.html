@@ -1,8 +1,9 @@
+{% load static %}
 <html>
 	
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href="45.css">
+		<link rel="stylesheet" href="{% static 'player/css/45.css' %}">
 	</head>
 	
 	<body>
@@ -24,7 +25,7 @@
 				</ul>
 
 				<div class="clearfix"></div>
-				<img src="45_1.jpg">
+				<img src="{% static 'player/images/45_1.jpg' %}">
 				{% endblock %}
 			</header>
 
