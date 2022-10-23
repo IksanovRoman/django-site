@@ -6,7 +6,7 @@
         <li>
             <h2> {{ p.title }} </h2>
             <p class="show_content"> {{ p.content|linebreaks|truncatewords:100 }} </p>
-            <p class="read_post_button"><a href="#">Читать пост </a></p>
+            <p class="read_post_button"><a href="{{ p.get_absolute_url }}">Читать пост </a></p>
             <hr>
         </li>
     {% endfor %}
