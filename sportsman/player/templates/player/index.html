@@ -4,9 +4,14 @@
 <ul class="list_content">
     {% for p in posts%}
         <li>
+            <div class="hat">
+                <p class="first"> Категория: {{ p.cat }} </p>
+                <p class="last"> Дата: {{ p.time_update|date:"d-m-Y H:i:s"}} </p>
+            </div>
+
             <h2> {{ p.title }} </h2>
-            <p class="show_content"> {{ p.content|linebreaks|truncatewords:100 }} </p>
-            <p class="read_post_button"><a href="{{ p.get_absolute_url }}">Читать пост </a></p>
+            <p class="show_content"> {{ p.content|linebreaks|truncatewords:70 }} </p>
+            <p class="read_post_button"><a href="{{ p.get_absolute_url }}"> Читать пост </a></p>
             <hr>
         </li>
     {% endfor %}

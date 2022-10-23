@@ -4,6 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="{% static 'player/css/45.css' %}">
+		<title> {{ title }} </title>
 	</head>
 	
 	<body>
@@ -37,13 +38,24 @@
 			
 			<aside>
 				<div>
-				<h2>Saepe repellendus</h2>
 				<ul>
-					<li><a href="#">Lorem ipsum dolor.</a></li><hr>
-					<li><a href="#">Saepe repellendus, veniam!</a></li><hr>
-					<li><a href="#">Repellendus laborum, sequi.</a></li><hr>
-					<li><a href="#">Inventore laudantium, eos!</a></li><hr>
-					<li><a href="#">Voluptate, ea, quaerat.</a></li><hr>
+					{% if cat_selected == 0 %}
+						<li> Все категории </li><hr>
+					{% else %}
+						<li><a href="{% url 'home' %}"> Все категории </a></li><hr>
+					{% endif %}
+
+					{% for c in cats %}
+						{% if c.pk == cat_selected %}
+							<li> {{ c.name }} </li><hr>
+						{% else %}
+							<li><a href="{{ c.get_absolute_url }}"> {{ c.name }} </a></li><hr>
+						{% endif %}
+					{% endfor %}
+<!--					<li><a href="#">Saepe repellendus, veniam!</a></li><hr>-->
+<!--					<li><a href="#">Repellendus laborum, sequi.</a></li><hr>-->
+<!--					<li><a href="#">Inventore laudantium, eos!</a></li><hr>-->
+<!--					<li><a href="#">Voluptate, ea, quaerat.</a></li><hr>-->
 				</ul>
 				</div>
 			</aside>
