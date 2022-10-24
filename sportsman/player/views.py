@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+
+from .forms import *
 from .models import *
 
 menu = [{'title': 'Главная страница', 'url_name': 'home'},
@@ -31,7 +33,15 @@ def about(request):
 
 
 def add_page(request):
-    return HttpResponse(f"Добавить статью")
+    if request.method == 'POST':
+        form = AddPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AddPostForm()
+
+    return render(request, 'player/add_page.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
 
 
 def contact(request):
