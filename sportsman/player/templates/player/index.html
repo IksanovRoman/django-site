@@ -9,12 +9,19 @@
                 <p class="last"> Дата: {{ p.time_update|date:"d-m-Y H:i:s"}} </p>
             </div>
 
+            {% if p.photo %}
+                <p><img class="image_post" src="{{ p.photo.url }}"></p>
+            {% endif %}
+
             <h2> {{ p.title }} </h2>
-            <p class="show_content"> {{ p.content|linebreaks|truncatewords:70 }} </p>
+            <p class="show_content"> {{ p.content|linebreaks|truncatewords:100 }} </p>
             <p class="read_post_button"><a href="{{ p.get_absolute_url }}"> Читать пост </a></p>
             <hr>
+            <div class="clearfix"></div>
         </li>
     {% endfor %}
 </ul>
+
 {% endblock %}
+
 

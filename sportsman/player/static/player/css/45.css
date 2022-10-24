@@ -121,11 +121,21 @@ main {
         list-style-type: none;
     }
 
+    .image_post{
+        width: 250px;
+        height: auto;
+        float: left;
+        margin: 10px 20px;
+    }
+
 	.show_content {
-	    font-family: initial;
-		font-size: 20px;
-		text-align: justify;
+	    font-size: 20px;
 		/* margin: 0px 0px 30px; */
+	}
+
+	.show_content ~ p {
+	    text-align: justify;
+	    font-family: initial;
 	}
 
     .read_post_button {
