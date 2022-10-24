@@ -22,6 +22,7 @@ from sportsman import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('captcha/', include('captcha.urls')),
     path('', include('player.urls')),
 ]
 
