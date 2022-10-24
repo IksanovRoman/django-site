@@ -161,6 +161,19 @@ main {
         color: hsl(240deg 6% 87%)
     }
 
+    .image_post_main {
+        width: 250px;
+        height: auto;
+        float: left;
+        margin: 10px 10px 10px 0px;
+        border-radius: 10px;
+    }
+
+    .post_main {
+        text-align: justify;
+        font-family: -webkit-body;
+        font-size: 20px;
+    }
 aside {
 	width: 30%;
 	float: right;

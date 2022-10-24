@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 
 menu = [{'title': 'Главная страница', 'url_name': 'home'},
@@ -42,8 +42,19 @@ def login(request):
     return HttpResponse(f"Авторизация")
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"Отображение статьи с идентификатором {post_id}")
+def show_post(request, post_slug):
+    post = get_object_or_404(Player, slug=post_slug)
+    cats = Category.objects.all()
+
+    context = {
+        'post': post,
+        'cats': cats,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat_id,
+    }
+
+    return render(request, 'player/post.html', context=context)
 
 
 def show_category(request, cat_id):
