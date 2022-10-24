@@ -1,47 +1,67 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import *
 from .models import *
-
-menu = [{'title': 'Главная страница', 'url_name': 'home'},
-        {'title': 'О сайте', 'url_name': 'about'},
-        {'title': 'Добавить статью', 'url_name': 'add_page'},
-        {'title': 'Обратная связь', 'url_name': 'contact'},
-        {'title': 'Войти', 'url_name': 'login'}
-        ]
+from .utils import *
 
 
 # Create your views here.
-def index(request):
-    posts = Player.objects.all()
-    cats = Category.objects.all()
+class PlayerHome(DataMixin, ListView):
+    model = Player
+    template_name = 'player/index.html'
+    context_object_name = 'posts'
 
-    context = {
-        'posts': posts,
-        'cats': cats,
-        'menu': menu,
-        'title': 'Главная страница',
-        'cat_selected': 0,
-    }
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Главная страница')
+        return dict(list(context.items()) + list(c_def.items()))
 
-    return render(request, 'player/index.html', context=context)
+
+# def index(request):
+#     posts = Player.objects.all()
+#     cats = Category.objects.all()
+#
+#     context = {
+#         'posts': posts,
+#         'cats': cats,
+#         'menu': menu,
+#         'title': 'Главная страница',
+#         'cat_selected': 0,
+#     }
+#
+#     return render(request, 'player/index.html', context=context)
 
 
 def about(request):
     return render(request, 'player/about.html', {'menu': menu, 'title': 'О сайте'})
 
 
-def add_page(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = AddPostForm()
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = AddPostForm
+    template_name = 'player/add_page.html'
+    success_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
 
-    return render(request, 'player/add_page.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Добавление статьи')
+        return dict(list(context.items()) + list(c_def.items()))
+
+
+# def add_page(request):
+#     if request.method == 'POST':
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = AddPostForm()
+#
+#     return render(request, 'player/add_page.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
 
 
 def contact(request):
@@ -52,37 +72,65 @@ def login(request):
     return HttpResponse(f"Авторизация")
 
 
-def show_post(request, post_slug):
-    post = get_object_or_404(Player, slug=post_slug)
-    cats = Category.objects.all()
+class ShowPost(DataMixin, DetailView):
+    model = Player
+    template_name = 'player/post.html'
+    slug_url_kwarg = 'post_slug'
+    context_object_name = 'post'
 
-    context = {
-        'post': post,
-        'cats': cats,
-        'menu': menu,
-        'title': post.title,
-        'cat_selected': post.cat_id,
-    }
-
-    return render(request, 'player/post.html', context=context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title=context['post'])
+        return dict(list(context.items()) + list(c_def.items()))
 
 
-def show_category(request, cat_id):
-    posts = Player.objects.filter(cat_id=cat_id)
-    cats = Category.objects.all()
+#
+# def show_post(request, post_slug):
+#     post = get_object_or_404(Player, slug=post_slug)
+#     cats = Category.objects.all()
+#
+#     context = {
+#         'post': post,
+#         'cats': cats,
+#         'menu': menu,
+#         'title': post.title,
+#         'cat_selected': post.cat_id,
+#     }
+#
+#     return render(request, 'player/post.html', context=context)
 
-    if len(posts) == 0:
-        raise Http404()
+class PlayerCategory(DataMixin, ListView):
+    model = Player
+    template_name = 'player/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
 
-    context = {
-        'posts': posts,
-        'cats': cats,
-        'menu': menu,
-        'title': 'Главная страница',
-        'cat_selected': cat_id,
-    }
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat),
+                                      cat_selected = context['posts'][0].cat_id)
+        return dict(list(context.items()) + list(c_def.items()))
 
-    return render(request, 'player/index.html', context=context)
+    def get_queryset(self):
+        return Player.objects.filter(cat__slug=self.kwargs['cat_slug'])
+
+
+# def show_category(request, cat_id):
+#     posts = Player.objects.filter(cat_id=cat_id)
+#     cats = Category.objects.all()
+#
+#     if len(posts) == 0:
+#         raise Http404()
+#
+#     context = {
+#         'posts': posts,
+#         'cats': cats,
+#         'menu': menu,
+#         'title': 'Главная страница',
+#         'cat_selected': cat_id,
+#     }
+#
+#     return render(request, 'player/index.html', context=context)
 
 
 def PageNotFound(request, exception):
