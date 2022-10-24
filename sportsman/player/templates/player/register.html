@@ -6,7 +6,6 @@
 <form method="post">
     {% csrf_token %}
 
-    <!--{{ form.as_p }}-->
     <div class="form_error"> {{ form.non_field_errors }} </div>
 
     {% for f in form %}
@@ -19,3 +18,5 @@
 
 {% endblock %}
 
+{% block aside %}
+{% endblock %}

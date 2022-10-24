@@ -1,5 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -36,6 +38,15 @@ class PlayerHome(DataMixin, ListView):
 #
 #     return render(request, 'player/index.html', context=context)
 
+class About(DataMixin, ListView):
+    model = Player
+    template_name = 'player/about.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='О сайте')
+        return dict(list(context.items()) + list(c_def.items()))
 
 def about(request):
     return render(request, 'player/about.html', {'menu': menu, 'title': 'О сайте'})
@@ -68,6 +79,7 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
 def contact(request):
     return HttpResponse(f"Обратная связь")
 
+
 class RegisterUser(DataMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'player/register.html'
@@ -78,9 +90,30 @@ class RegisterUser(DataMixin, CreateView):
         c_def = self.get_user_context(title='Регистрация')
         return dict(list(context.items()) + list(c_def.items()))
 
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
 
-def login(request):
-    return HttpResponse(f"Авторизация")
+
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm
+    template_name = 'player/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Авторизация')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+def logout_user(request):
+    logout(request)
+    return redirect('login'
+                    )
+# def login(request):
+#     return HttpResponse(f"Авторизация")
 
 
 class ShowPost(DataMixin, DetailView):
@@ -119,7 +152,7 @@ class PlayerCategory(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat),
-                                      cat_selected = context['posts'][0].cat_id)
+                                      cat_selected=context['posts'][0].cat_id)
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
