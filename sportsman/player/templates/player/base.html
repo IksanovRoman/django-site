@@ -8,10 +8,6 @@
 	</head>
 	
 	<body>
-		<div id="underwrapper">
-			<h1>down the stream</h1>
-			<p>template designed by webtemplateocean.com</p>
-		</div>
 		
 		<div id="wrapper">
 
@@ -19,23 +15,35 @@
 				{% block mainmenu %}
 
 				<ul>
-					{% for m in menu %}
-					<li><a href="{% url m.url_name%}"> {{ m.title }} </a></li>
-					{% endfor %}
+					<div id="first-menu">
+					<li class="logo"><a href="{% url 'home' %}"> <img src="{% static 'player/images/logo.jpg' %}"> </a></li>
 
+						{% if request.user.is_authenticated %}
+							<li class="li_header_first_menu header-link"><a href="{% url 'add_page' %}"> Добавить статью </a></li>
+						{% else %}
+							<li class="li_header_first_menu header-link"><a href="{% url 'login' %}"> Добавить статью </a></li>
+						{% endif %}
+
+					<li class="li_header_first_menu header-link"><a href="{% url 'contact' %}"> Обратная связь </a></li>
+					<li class="li_header_first_menu header-link"><a href="{% url 'about' %}"> О сайте </a></li>
+
+					</div>
+
+					<div id="last-menu">
 					{% if request.user.is_authenticated %}
-					<li>{{ user.username }}</li>
-					<li><a href="{% url 'logout' %}"> Выйти </a></li>
+					<li class="li_header_last_menu">{{ user.username }}</li>
+					<li class="login-link"><a class="login" href="{% url 'logout' %}"> Выйти </a></li>
 					{% else %}
-					<li><a href="{% url 'register' %}"> Регистрация </a></li>
-					<li><a href="{% url 'login' %}"> Войти </a></li>
+					<li class="li_header_last_menu header-link"><a href="{% url 'register' %}"> Регистрация </a></li>
+					<li class="login-link"><a class="login" href="{% url 'login' %}"> Войти </a></li>
 					{% endif %}
+					</div>
 
 					<div class="clearfix"></div>
 				</ul>
 
 				<div class="clearfix"></div>
-				<img src="{% static 'player/images/45_1.jpg' %}">
+				<img class="main-image" src="{% static 'player/images/main-image.jpg' %}">
 				{% endblock %}
 			</header>
 
@@ -85,7 +93,7 @@
 				<div>
 				<ul>
 					{% if cat_selected == 0 %}
-						<li> Все категории </li><hr>
+						<li class="current_cat"> Все категории </li><hr>
 					{% else %}
 						<li><a href="{% url 'home' %}"> Все категории </a></li><hr>
 					{% endif %}
@@ -93,7 +101,7 @@
 					{% for c in cats %}
 					{% if c.player__count > 0 %}
 						{% if c.pk == cat_selected %}
-							<li> {{ c.name }} </li><hr>
+							<li class="current_cat"> {{ c.name }} </li><hr>
 						{% else %}
 							<li><a href="{{ c.get_absolute_url }}"> {{ c.name }} </a></li><hr>
 						{% endif %}
@@ -107,8 +115,8 @@
 			<div class="clearfix"></div>
 
 			<footer>
-				<div><a href="#">
-				Copyright © 2012, designed by WebTemplateOcean.com</a>
+				<div>
+				© 2022 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено.
 				</div>
 			</footer>
 					
